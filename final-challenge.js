@@ -3,14 +3,6 @@
 
   function app() {
     var $formCadastro = new DOM('[data-js="cadastro"]');
-    var $nome = new DOM('[data-js="nome"]');
-    var $telefone = new DOM('[data-js="telefone"]');
-    var $imagem = new DOM('[data-js="imagem"]');
-    var $marcaModelo = new DOM('[data-js="marca-modelo"]');
-    var $ano = new DOM('[data-js="ano"]');
-    var $placa = new DOM('[data-js="placa"]');
-    var $cor = new DOM('[data-js="cor"]');
-    var $dados = new DOM('[data-js="dados"]');
     var ajax = new XMLHttpRequest();
 
     function enviarRequisicao() {
@@ -25,6 +17,8 @@
 
     function preencherDadosCabecalho() {
       var dados = JSON.parse(ajax.responseText);
+      var $nome = new DOM('[data-js="nome"]');
+      var $telefone = new DOM('[data-js="telefone"]');
 
       $nome.get()[0].textContent = dados.name;
       $telefone.get()[0].textContent = dados.phone;
@@ -55,6 +49,12 @@
     }
 
     function prencherDadosEstrutura(carro) {
+      var $imagem = new DOM('[data-js="imagem"]');
+      var $marcaModelo = new DOM('[data-js="marca-modelo"]');
+      var $ano = new DOM('[data-js="ano"]');
+      var $placa = new DOM('[data-js="placa"]');
+      var $cor = new DOM('[data-js="cor"]');
+
       carro.linkImagem.textContent = 'Foto do Carro';
       carro.linkImagem.href = $imagem.get()[0].value;
       carro.marcaModelo.textContent = $marcaModelo.get()[0].value;
@@ -66,6 +66,8 @@
     }
 
     function criarHierarquiaDOMEstrutura(carro) {
+      var $dados = new DOM('[data-js="dados"]');
+      
       carro.imagem.appendChild(carro.linkImagem);
       carro.cadastro.appendChild(carro.imagem);
       carro.cadastro.appendChild(carro.marcaModelo);
