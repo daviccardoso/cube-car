@@ -35,7 +35,7 @@
 <body>
     <h1 data-js="nome"></h1>
     <h2 data-js="telefone"></h2>
-    <form action="" data-js="cadastro">
+    <form action="/" data-js="cadastro">
         <p>
             <label for="imagem">Imagem do carro</label>
             <input type="text" data-js="imagem" id="imagem">
@@ -58,14 +58,17 @@
         </p>
         <button type="submit">Cadastrar</button>
     </form>
-    <table data-js="dados">
-        <tr>
-            <th>Imagem</th>
-            <th>Marca/Modelo</th>
-            <th>Ano</th>
-            <th>Placa</th>
-            <th>Cor</th>
-        </tr>
+    <table>
+        <thead>
+            <tr>
+                <th>Imagem</th>
+                <th>Marca/Modelo</th>
+                <th>Ano</th>
+                <th>Placa</th>
+                <th>Cor</th>
+            </tr>
+        </thead>
+        <tbody data-js="dados"></tbody>
     </table>
     <script src="DOM.js"></script>
     <script src="final-challenge.js"></script>
