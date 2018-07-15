@@ -17,6 +17,9 @@
     };
 
     DOM.prototype.get = function get() {
+        if (this.element.length === 1)
+            return this.element[0];
+        
         return this.element;
     };
 
