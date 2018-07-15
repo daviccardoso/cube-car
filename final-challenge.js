@@ -7,7 +7,7 @@
         this.obterDadosDaCompanhia();
         this.adicionarEventos();
       },
-      
+
       obterDadosDaCompanhia: function obterDadosDaCompanhia() {
         var ajax = new XMLHttpRequest();
         ajax.open('GET', 'company.json');
@@ -25,8 +25,8 @@
         var $nome = new DOM('[data-js="nome"]');
         var $telefone = new DOM('[data-js="telefone"]');
 
-        $nome.get()[0].textContent = dados.name;
-        $telefone.get()[0].textContent = dados.phone;
+        $nome.get().textContent = dados.name;
+        $telefone.get().textContent = dados.phone;
       },
 
       manipularSubmitForm: function manipularSubmitForm(event) {
@@ -35,52 +35,30 @@
       },
 
       atualizarDadosTabela: function atualizarDadosTabela() {
-        var carro = this.criarEstruturaDados();
-        carro = this.prencherDadosEstrutura(carro);
-        this.criarHierarquiaDOMEstrutura(carro);
-      },
+        var docFragment = document.createDocumentFragment();
+        var trCadastro = document.createElement('tr');
+        var tdImagem = document.createElement('td');
+        var imagem = document.createElement('img');
+        var tdMarcaModelo = document.createElement('td');
+        var tdAno = document.createElement('td');
+        var tdPlaca = document.createElement('td');
+        var tdCor = document.createElement('td');
 
-      criarEstruturaDados: function criarEstruturaDados() {
-        return {
-          docFragment: document.createDocumentFragment(),
-          cadastro: document.createElement('tr'),
-          imagem: document.createElement('td'),
-          linkImagem: document.createElement('img'),
-          marcaModelo: document.createElement('td'),
-          ano: document.createElement('td'),
-          placa: document.createElement('td'),
-          cor: document.createElement('td')
-        };
-      },
+        imagem.src = new DOM('[data-js="imagem"]').get().value;
+        tdMarcaModelo.textContent = new DOM('[data-js="marca-modelo"]').get().value;
+        tdAno.textContent = new DOM('[data-js="ano"]').get().value;
+        tdPlaca.textContent = new DOM('[data-js="placa"]').get().value;
+        tdCor.textContent = new DOM('[data-js="cor"]').get().value;
 
-      prencherDadosEstrutura: function prencherDadosEstrutura(carro) {
-        var $imagem = new DOM('[data-js="imagem"]');
-        var $marcaModelo = new DOM('[data-js="marca-modelo"]');
-        var $ano = new DOM('[data-js="ano"]');
-        var $placa = new DOM('[data-js="placa"]');
-        var $cor = new DOM('[data-js="cor"]');
+        tdImagem.appendChild(imagem);
+        trCadastro.appendChild(tdImagem);
+        trCadastro.appendChild(tdMarcaModelo);
+        trCadastro.appendChild(tdAno);
+        trCadastro.appendChild(tdPlaca);
+        trCadastro.appendChild(tdCor);
+        docFragment.appendChild(trCadastro);
 
-        carro.linkImagem.textContent = 'Foto do Carro';
-        carro.linkImagem.src = $imagem.get()[0].value;
-        carro.marcaModelo.textContent = $marcaModelo.get()[0].value;
-        carro.ano.textContent = $ano.get()[0].value;
-        carro.placa.textContent = $placa.get()[0].value;
-        carro.cor.textContent = $cor.get()[0].value;
-
-        return carro;
-      },
-
-      criarHierarquiaDOMEstrutura: function criarHierarquiaDOMEstrutura(carro) {
-        var $dados = new DOM('[data-js="dados"]');
-
-        carro.imagem.appendChild(carro.linkImagem);
-        carro.cadastro.appendChild(carro.imagem);
-        carro.cadastro.appendChild(carro.marcaModelo);
-        carro.cadastro.appendChild(carro.ano);
-        carro.cadastro.appendChild(carro.placa);
-        carro.cadastro.appendChild(carro.cor);
-        carro.docFragment.appendChild(carro.cadastro);
-        $dados.get()[0].appendChild(carro.docFragment);
+        new DOM('[data-js="dados"]').get().appendChild(docFragment);
       },
 
       adicionarEventos: function adicionarEventos() {
