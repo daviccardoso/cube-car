@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cube Car</title>
+    <style>
+        label {
+            display: inline-block;
+            width: 120px;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #000;
+            text-align: center;
+        }
+
+        th {
+            width: 120px;
+        }
+
+        img {
+            max-width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 data-js="nome"></h1>
+    <h2 data-js="telefone"></h2>
+    <form action="/" data-js="cadastro">
+        <p>
+            <label for="imagem">Imagem do carro</label>
+            <input type="text" data-js="imagem" id="imagem">
+        </p>
+        <p>
+            <label for="marca-modelo">Marca/Modelo</label>
+            <input type="text" data-js="marca-modelo" id="marca-modelo">
+        </p>
+        <p>
+            <label for="ano">Ano</label>
+            <input type="number" data-js="ano" step="1">
+        </p>
+        <p>
+            <label for="placa">Placa</label>
+            <input type="text" data-js="placa" id="placa">
+        </p>
+        <p>
+            <label for="cor">Cor</label>
+            <input type="text" data-js="cor" id="cor">
+        </p>
+        <button type="submit">Cadastrar</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Imagem</th>
+                <th>Marca/Modelo</th>
+                <th>Ano</th>
+                <th>Placa</th>
+                <th>Cor</th>
+            </tr>
+        </thead>
+        <tbody data-js="dados"></tbody>
+    </table>
+    <script src="DOM.js"></script>
+    <script src="final-challenge.js"></script>
+</body>
+
+</html>
