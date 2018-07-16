@@ -31,7 +31,7 @@
 
       manipularSubmitForm: function manipularSubmitForm(event) {
         event.preventDefault();
-        app().atualizarDadosTabela();
+        app().inserirCarro();
       },
 
       atualizarDadosTabela: function atualizarDadosTabela() {
@@ -66,6 +66,20 @@
         docFragment.appendChild(trCadastro);
 
         new DOM('[data-js="dados"]').get().appendChild(docFragment);
+      },
+
+      inserirCarro: function inserirCarro() {
+        var image = new DOM('[data-js="imagem"]').get().value;
+        var brandModel = new DOM('[data-js="marca-modelo"]').get().value;
+        var year = new DOM('[data-js="ano"]').get().value;
+        var plate = new DOM('[data-js="placa"]').get().value;
+        var color = new DOM('[data-js="cor"]').get().value;
+        var queryString = 'image=' + image + '&brandModel=' + brandModel + '&year=' + year + '&plate=' + plate + '&color=' + color;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/car');
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(queryString);
       },
 
       excluirCarro: function excluirCarro() {
