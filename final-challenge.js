@@ -8,23 +8,36 @@
         this.adicionarEventos();
       },
 
-      obterDadosDaCompanhia: function obterDadosDaCompanhia() {
+      criarRequisicaoAJAX: function criarRequisicaoAJAX(metodo, url, header, dados, callback) {
         var ajax = new XMLHttpRequest();
-        ajax.open('GET', 'company.json');
-        ajax.send();
-        ajax.addEventListener('readystatechange', this.verificarStatusRequisicao, false);
+        
+        ajax.open(metodo, url);
+        
+        if (header)
+          ajax.setRequestHeader.apply(ajax, header);
+
+        ajax.send(dados);
+        ajax.addEventListener('readystatechange', callback, false);
+        
+        return ajax;
       },
 
-      verificarStatusRequisicao: function verificarStatusRequisicao() {
-        if (this.readyState === 4 && this.status === 200)
-          app().preencherDadosCabecalho.call(this);
+      obterDadosDaCompanhia: function obterDadosDaCompanhia() {
+        this.criarRequisicaoAJAX('GET', 'company.json', undefined, undefined, this.preencherDadosCabecalho);
+      },
+
+      verificarStatusRequisicao: function verificarStatusRequisicao(ajax) {
+        return ajax.readyState === 4 && ajax.status === 200;
       },
 
       preencherDadosCabecalho: function preencherDadosCabecalho() {
-        var dados = JSON.parse(this.responseText);
+        
+        if (!app().verificarStatusRequisicao(this))
+          return;
+        
         var $nome = new DOM('[data-js="nome"]');
         var $telefone = new DOM('[data-js="telefone"]');
-
+        var dados = JSON.parse(this.responseText);
         $nome.get().textContent = dados.name;
         $telefone.get().textContent = dados.phone;
       },
@@ -76,10 +89,12 @@
         var color = new DOM('[data-js="cor"]').get().value;
         var queryString = 'image=' + image + '&brandModel=' + brandModel + '&year=' + year + '&plate=' + plate + '&color=' + color;
 
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:3000/car');
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send(queryString);
+        this.criarRequisicaoAJAX(
+          'POST',
+          'http://localhost:3000/car',
+          ['Content-Type', 'application/x-www-form-urlencoded'],
+          queryString
+        );
       },
 
       excluirCarro: function excluirCarro() {
