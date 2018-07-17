@@ -83,6 +83,7 @@
           tdPlaca.textContent = carro.plate;
           tdCor.textContent = carro.color;
           btnExcluir.textContent = 'Excluir';
+          btnExcluir.setAttribute('data-button', carro.plate)
           btnExcluir.addEventListener('click', app().excluirCarro, false);
 
           tdImagem.appendChild(imagem);
@@ -93,34 +94,44 @@
           trCadastro.appendChild(tdCor);
           tdExcluir.appendChild(btnExcluir);
           trCadastro.appendChild(tdExcluir);
-          trCadastro.setAttribute('data-js', tdPlaca.textContent);
+          trCadastro.setAttribute('data-js', carro.plate);
           docFragment.appendChild(trCadastro);
           new DOM('[data-js="dados"]').get().appendChild(docFragment);
         });
       },
 
-      inserirCarro: function inserirCarro() {
+      criarQueryStringCadastro: function criarQueryStringCadastro() {
         var image = new DOM('[data-js="imagem"]').get().value;
         var brandModel = new DOM('[data-js="marca-modelo"]').get().value;
         var year = new DOM('[data-js="ano"]').get().value;
         var plate = new DOM('[data-js="placa"]').get().value;
         var color = new DOM('[data-js="cor"]').get().value;
-        var queryString = 'image=' + image + '&brandModel=' + brandModel + '&year=' + year + '&plate=' + plate + '&color=' + color;
+        return 'image=' + image + '&brandModel=' + brandModel + '&year=' + year + '&plate=' + plate + '&color=' + color;
+      },
 
+      inserirCarro: function inserirCarro() {
         this.criarRequisicaoAJAX(
           'POST',
           'http://localhost:3000/car',
           ['Content-Type', 'application/x-www-form-urlencoded'],
-          queryString
+          this.criarQueryStringCadastro()
         );
 
         this.obterDadosCarros();
       },
 
       excluirCarro: function excluirCarro() {
-        var placa = this.parentNode.parentNode.getAttribute('data-js');
+        var placa = this.getAttribute('data-button');
         var trCadastro = new DOM('[data-js="' + placa + '"]');
+
         new DOM('[data-js="dados"').get().removeChild(trCadastro.get());
+
+        app().criarRequisicaoAJAX(
+          'DELETE',
+          'http://localhost:3000/car',
+          ['Content-Type', 'application/x-www-form-urlencoded'],
+          'plate=' + placa
+        );
       },
 
       manipularSubmitForm: function manipularSubmitForm(event) {
