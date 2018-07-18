@@ -141,7 +141,7 @@
         obterDadosDaCompanhia();
         obterDadosCarros();
         adicionarEventos();
-      },
+      }
     };
   })();
 
