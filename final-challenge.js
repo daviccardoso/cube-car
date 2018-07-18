@@ -33,11 +33,12 @@
         if (!app().verificarStatusRequisicao(this))
           return;
 
-        var $nome = new DOM('[data-js="nome"]');
-        var $telefone = new DOM('[data-js="telefone"]');
+        var $nome = new DOM('[data-js="nome"]').get();
+        var $telefone = new DOM('[data-js="telefone"]').get();
         var dados = JSON.parse(this.responseText);
-        $nome.get().textContent = dados.name;
-        $telefone.get().textContent = dados.phone;
+        
+        $nome.textContent = dados.name;
+        $telefone.textContent = dados.phone;
       },
 
       obterDadosCarros: function obterDadosCarros() {
@@ -83,7 +84,7 @@
           tdPlaca.textContent = carro.plate;
           tdCor.textContent = carro.color;
           btnExcluir.textContent = 'Excluir';
-          btnExcluir.setAttribute('data-button', carro.plate)
+          btnExcluir.setAttribute('data-button', carro.plate);
           btnExcluir.addEventListener('click', app().excluirCarro, false);
 
           tdImagem.appendChild(imagem);
@@ -122,9 +123,9 @@
 
       excluirCarro: function excluirCarro() {
         var placa = this.getAttribute('data-button');
-        var trCadastro = new DOM('[data-js="' + placa + '"]');
+        var trCadastro = new DOM('[data-js="' + placa + '"]').get();
 
-        new DOM('[data-js="dados"').get().removeChild(trCadastro.get());
+        new DOM('[data-js="dados"').get().removeChild(trCadastro);
 
         app().criarRequisicaoAJAX(
           'DELETE',
