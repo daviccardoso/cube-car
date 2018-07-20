@@ -3,16 +3,24 @@
 
   var app = (function() {
     function obterDadosDaCompanhia() {
-      criarRequisicaoAJAX('GET', 'company.json', undefined, undefined, preencherDadosCabecalho);
+      criarRequisicaoAJAX(
+        'GET',
+        'company.json',
+        undefined,
+        preencherDadosCabecalho
+      );
     }
 
-    function criarRequisicaoAJAX(metodo, url, header, dados, callback) {
+    function criarRequisicaoAJAX(metodo, url, dados, callback) {
       var ajax = new XMLHttpRequest();
 
       ajax.open(metodo, url);
 
-      if (header)
-        ajax.setRequestHeader.apply(ajax, header);
+      if (metodo !== 'GET')
+        ajax.setRequestHeader(
+          'Content-Type',
+          'application/x-www-form-urlencoded'
+        );
 
       ajax.send(dados);
       ajax.addEventListener('readystatechange', callback, false);
@@ -38,8 +46,8 @@
         'GET',
         'http://localhost:3000/car',
         undefined,
-        undefined,
-        atualizarDadosTabela);
+        atualizarDadosTabela
+      );
     }
 
     function limparDadosTabela() {
@@ -99,14 +107,17 @@
       var year = new DOM('[data-js="ano"]').get().value;
       var plate = new DOM('[data-js="placa"]').get().value;
       var color = new DOM('[data-js="cor"]').get().value;
-      return 'image=' + image + '&brandModel=' + brandModel + '&year=' + year + '&plate=' + plate + '&color=' + color;
+      return 'image=' + image +
+      '&brandModel=' + brandModel +
+      '&year=' + year +
+      '&plate='+ plate +
+      '&color=' + color;
     }
 
     function inserirCarro() {
       criarRequisicaoAJAX(
         'POST',
         'http://localhost:3000/car',
-        ['Content-Type', 'application/x-www-form-urlencoded'],
         criarQueryStringCadastro()
       );
 
@@ -122,7 +133,6 @@
       criarRequisicaoAJAX(
         'DELETE',
         'http://localhost:3000/car',
-        ['Content-Type', 'application/x-www-form-urlencoded'],
         'plate=' + placa
       );
     }
