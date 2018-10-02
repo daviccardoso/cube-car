@@ -1,26 +1,28 @@
 (function(DOM, document) {
   'use strict';
 
-  var app = (function() {
+  const app = (function() {
+    const urlBackEnd = 'http://localhost:3000/car';
+
     function obterDadosDaCompanhia() {
-      criarRequisicaoAJAX(
-        'GET',
-        'company.json',
-        undefined,
-        preencherDadosCabecalho
-      );
+      criarRequisicaoAJAX({
+        metodo: 'GET',
+        url: 'company.json',
+        callback: preencherDadosCabecalho
+      });
     }
 
-    function criarRequisicaoAJAX(metodo, url, dados, callback) {
-      var ajax = new XMLHttpRequest();
+    function criarRequisicaoAJAX({ metodo, url, dados, callback }) {
+      const ajax = new XMLHttpRequest();
 
       ajax.open(metodo, url);
 
-      if (metodo !== 'GET')
+      if (metodo !== 'GET') {
         ajax.setRequestHeader(
           'Content-Type',
           'application/x-www-form-urlencoded'
         );
+      }
 
       ajax.send(dados);
       ajax.addEventListener('readystatechange', callback, false);
@@ -31,27 +33,26 @@
     }
 
     function preencherDadosCabecalho() {
-      if (!verificarStatusRequisicao(this))
-        return;
+      if (!verificarStatusRequisicao(this)) return;
 
-      var $nome = new DOM('[data-js="nome"]');
-      var $telefone = new DOM('[data-js="telefone"]');
-      var dados = JSON.parse(this.responseText);
-      $nome.get().textContent = dados.name;
-      $telefone.get().textContent = dados.phone;
+      const $nome = new DOM('[data-js="nome"]').get();
+      const $telefone = new DOM('[data-js="telefone"]').get();
+      const dados = JSON.parse(this.responseText);
+
+      $nome.textContent = dados.name;
+      $telefone.textContent = dados.phone;
     }
 
     function obterDadosCarros() {
-      criarRequisicaoAJAX(
-        'GET',
-        'http://localhost:3000/car',
-        undefined,
-        atualizarDadosTabela
-      );
+      criarRequisicaoAJAX({
+        metodo: 'GET',
+        url: urlBackEnd,
+        callback: atualizarDadosTabela
+      });
     }
 
     function limparDadosTabela() {
-      var dados = new DOM('[data-js="dados"]').get();
+      const dados = new DOM('[data-js="dados"]').get();
 
       while (dados.firstChild) {
         dados.removeChild(dados.firstChild);
@@ -59,24 +60,23 @@
     }
 
     function atualizarDadosTabela() {
-      if (!verificarStatusRequisicao(this))
-        return;
+      if (!verificarStatusRequisicao(this)) return;
 
-      var carros = JSON.parse(this.responseText);
+      const carros = JSON.parse(this.responseText);
 
       limparDadosTabela();
 
-      carros.forEach(function(carro) {
-        var docFragment = document.createDocumentFragment();
-        var trCadastro = document.createElement('tr');
-        var btnExcluir = document.createElement('button');
-        var tdImagem = document.createElement('td');
-        var imagem = document.createElement('img');
-        var tdMarcaModelo = document.createElement('td');
-        var tdAno = document.createElement('td');
-        var tdPlaca = document.createElement('td');
-        var tdCor = document.createElement('td');
-        var tdExcluir = document.createElement('td');
+      carros.forEach(carro => {
+        const docFragment = document.createDocumentFragment();
+        const trCadastro = document.createElement('tr');
+        const btnExcluir = document.createElement('button');
+        const tdImagem = document.createElement('td');
+        const imagem = document.createElement('img');
+        const tdMarcaModelo = document.createElement('td');
+        const tdAno = document.createElement('td');
+        const tdPlaca = document.createElement('td');
+        const tdCor = document.createElement('td');
+        const tdExcluir = document.createElement('td');
 
         imagem.src = carro.image;
         tdMarcaModelo.textContent = carro.brandModel;
@@ -97,44 +97,43 @@
         trCadastro.appendChild(tdExcluir);
         trCadastro.setAttribute('data-js', carro.plate);
         docFragment.appendChild(trCadastro);
+
         new DOM('[data-js="dados"]').get().appendChild(docFragment);
       });
     }
 
     function criarQueryStringCadastro() {
-      var image = new DOM('[data-js="imagem"]').get().value;
-      var brandModel = new DOM('[data-js="marca-modelo"]').get().value;
-      var year = new DOM('[data-js="ano"]').get().value;
-      var plate = new DOM('[data-js="placa"]').get().value;
-      var color = new DOM('[data-js="cor"]').get().value;
-      return 'image=' + image +
-      '&brandModel=' + brandModel +
-      '&year=' + year +
-      '&plate='+ plate +
-      '&color=' + color;
+      const image = new DOM('[data-js="imagem"]').get().value;
+      const brandModel = new DOM('[data-js="marca-modelo"]').get().value;
+      const year = new DOM('[data-js="ano"]').get().value;
+      const plate = new DOM('[data-js="placa"]').get().value;
+      const color = new DOM('[data-js="cor"]').get().value;
+
+      return `image=${image}&brandModel=${brandModel}&year=${year}\
+              &plate=${plate}&color=${color}`;
     }
 
     function inserirCarro() {
-      criarRequisicaoAJAX(
-        'POST',
-        'http://localhost:3000/car',
-        criarQueryStringCadastro()
-      );
+      criarRequisicaoAJAX({
+        metodo: 'POST',
+        url: urlBackEnd,
+        dados: criarQueryStringCadastro()
+      });
 
       obterDadosCarros();
     }
 
     function excluirCarro() {
-      var placa = this.getAttribute('data-button');
-      var trCadastro = new DOM('[data-js="' + placa + '"]');
+      const placa = this.getAttribute('data-button');
+      const trCadastro = new DOM('[data-js="' + placa + '"]').get();
 
-      new DOM('[data-js="dados"').get().removeChild(trCadastro.get());
+      new DOM('[data-js="dados"').get().removeChild(trCadastro);
 
-      criarRequisicaoAJAX(
-        'DELETE',
-        'http://localhost:3000/car',
-        'plate=' + placa
-      );
+      criarRequisicaoAJAX({
+        metodo: 'DELETE',
+        url: urlBackEnd,
+        dados: 'plate=' + placa
+      });
     }
 
     function manipularSubmitForm(event) {
