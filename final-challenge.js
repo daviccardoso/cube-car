@@ -132,7 +132,7 @@
       criarRequisicaoAJAX({
         metodo: 'DELETE',
         url: urlBackEnd,
-        dados: 'plate=' + placa
+        dados: `plate=${placa}`
       });
     }
 
