@@ -1,5 +1,7 @@
 body {
     font-family: Tahoma, sans-serif;
+    color: #667581;
+    background: rgba(100, 148, 237, 0.137);
 }
 
 .flex-container {
@@ -19,8 +21,20 @@ p {
     width: 150px;
 }
 
+button {
+    background: #667581;
+    color: #fff;
+    border: 0;
+    border-radius: 5px;
+}
+
 table {
-    border: 1px solid #000;
+    border-collapse: collapse;
+}
+
+th {
+    font-weight: normal;
+    flex: 1 0px;
 }
 
 img {
@@ -32,4 +46,3 @@ img {
         flex: 1 auto;
     }
 }
-
